@@ -1,38 +1,38 @@
 `timescale 1ns/1ps
 
-`include "add.v"
+`include "function.v"
 `default_nettype none // Enforce explicit declaration of all nets and variables
 
-module tb_add;
+module tb_function;
 reg clk;
 reg rst_n;
 reg [3:0] a;
 reg [3:0] b;
-wire [4:0] c;
-add adder (
+wire [4:0] result;
+
+TRY dut (
     .i_a (a),
     .i_b (b),
-    .o_c (c), 
+    .i_clk (clk),
     .i_rst_n (rst_n),
-    .i_clk (clk)
+    .o_result (result)
 );
+
 
 localparam CLK_PERIOD = 4;
 always #(CLK_PERIOD/2) clk=~clk;
 
 initial begin
-    $dumpfile("tb_add.vcd");
-    $dumpvars(0, tb_add);
+    $dumpfile("tb_function.vcd");
+    $dumpvars();
 end
 
 initial begin
 // 1. Initialize everything
     clk = 0;
-    rst_n = 0;
     a = 0;
     b = 0;
-
-    // 2. Release Reset
+        // 2. Release Reset
     repeat(5) @(posedge clk);
     rst_n = 1;
 
@@ -48,4 +48,4 @@ initial begin
 end
 
 endmodule
-`default_nettype wire
+`default_nettype none
